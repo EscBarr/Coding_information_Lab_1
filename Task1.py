@@ -187,19 +187,19 @@ class Task_1:
     def Draw_Bernylli_table(self):
         if self.list_box_table.curselection():
             self.label_table = Label(self.fr_Sheet, text="Вероятностная схема:")
-            self.label_table.grid(row=0, column=0)
+            self.label_table.grid(row=0, column=0, padx=6, pady=6)
             n = self.select_table_for_draw()
             self.sheet = Sheet(self.fr_Sheet, data=[[f"{round(c, 5)}" for c in self.All_tables[n]] for r in range(1)],
                                height=120,
                                width=500, default_header="numbers")
             self.sheet.enable_bindings()
             self.sheet.change_theme(theme="light blue")
-            self.sheet.grid(row=1, column=0)
+            self.sheet.grid(row=1, column=0, padx=6, pady=6)
 
             self.button_hide_table = Button(self.fr_List_of_tables, text="Убрать таблицу",
                                                command=self.Hide_Table, anchor=W)
             self.button_hide_table.configure(width=15, activebackground="#33B5E5")
-            self.button_hide_table.grid(row=1, column=1)
+            self.button_hide_table.grid(row=1, column=1, padx=6, pady=6)
         return
 
 def Bernylli_Test(n, p):
