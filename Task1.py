@@ -40,18 +40,22 @@ class Task_1:
 
         self.fr_left = Frame(window)
         #self.fr_left.configure(background='red')
-        self.fr_left.grid(row=1, column=1)
+        self.fr_left.grid(row=1, column=1,padx=6, pady=6)
 
-        #self.fr_Sheet = Frame(window)
+        self.fr_Sheet = Frame(window)
+        self.fr_Sheet.grid(row=0, column=0,padx=6, pady=6)
         #self.fr_Sheet.grid_columnconfigure(0, weight=1)
         #self.fr_Sheet.grid_rowconfigure(0, weight=1)
         #self.fr_Sheet.grid(row=0, column=0)
         #self.fr_Sheet.configure(background='black')
         #self.fr_Sheet.grid_propagate(False)
 
+        self.fr_List_of_tables = Frame(window)
+        self.fr_List_of_tables.grid(row=1, column=0,padx=6, pady=6)
+
         self.fr_canvas = Frame(window)
         #self.fr_canvas.configure(background='red')
-        self.fr_canvas.grid(row=0, column=1)
+        self.fr_canvas.grid(row=0, column=1,padx=6, pady=6)
 
         self.F = Figure()
         self.canvas = FigureCanvasTkAgg(self.F, self.fr_canvas)
@@ -60,7 +64,7 @@ class Task_1:
         self.toolbar = CustomToolbar(self.canvas, self.fr_canvas)
         self.toolbar.update()
         self.toolbar.pack(side=BOTTOM, fill=X)
-        self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+        self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True, padx=6, pady=6 )
         self.Init_left_frame()
 
     def Init_left_frame(self):
@@ -68,28 +72,27 @@ class Task_1:
         vcmd1 = (self.window.register(self.onValidate_num_float), '%d', '%s', '%P')
 
         self.button_del = Button(self.fr_left, text="Произвести расчет", command=self.Perform_calc, anchor=W)
-        self.button_del.configure(width=20, activebackground="#33B5E5")
-        self.button_del.grid(row=0, column=0)
+        self.button_del.configure(width=15, activebackground="#33B5E5")
+        self.button_del.grid(row=0, column=0, padx=6, pady=6)
 
         self.Entry_N = Entry(self.fr_left, validate="key", validatecommand=vcmd, width=10, justify=LEFT)
         self.Entry_N.insert(0, str(self.Num_Trials))
         self.Entry_N.bind("<KeyRelease>", self.change_field_N)
-        self.Entry_N.grid(row=1, column=1)
+        self.Entry_N.grid(row=1, column=1, padx=6, pady=6)
 
         self.label_N = Label(self.fr_left, text="Количество испытаний:")
 
-        self.label_N.grid(row=1, column=0)
+        self.label_N.grid(row=1, column=0, padx=6, pady=6)
 
         self.label_P = Label(self.fr_left, text="Стартовая вероятность:")
-        self.label_P.grid(row=2, column=0)
+        self.label_P.grid(row=2, column=0, padx=6, pady=6)
 
         self.entry_P = Entry(self.fr_left, validate="key", validatecommand=vcmd1, width=10, justify=LEFT)
-        self.entry_P.grid(row=2, column=1)
+        self.entry_P.grid(row=2, column=1, padx=6, pady=6)
         self.entry_P.insert(0, str(self.Probability))
         self.entry_P.bind("<KeyRelease>", self.change_field_P)
 
-        self.label_table = Label(self.window, text="Вероятностная схема:")
-        self.label_table.grid (row = 0, column = 0)
+
 
 
 
@@ -142,26 +145,62 @@ class Task_1:
                 Result_entropy += (It_inside * math.log2(It_inside))
             Result_array.append(-1 * Result_entropy)
 
-        Arr_ten_num = np.linspace(0,1,10)
-        self.sheet = Sheet(self.window,data=[[f"{round(c,3)}"for c in Result_array] for r in range(1)],height=120, width=500,default_header = "numbers")
-        self.sheet.enable_bindings()
-        self.sheet.change_theme(theme="light blue")
-        self.sheet.grid(row=1, column=0)
+        self.draw_bernylli_table_task1(Result_array)
+        return
+
+    def select_table_for_draw(self):
+        selection = self.list_box_table.curselection()
+        # мы можем получить удаляемый элемент по индексу
+        # selected_language = languages_listbox.get(selection[0])
+        # мы можем получить элемент по индексу
+        return int(self.list_box_table.get(selection[0]))-1
+
+
+    def draw_bernylli_table_task1(self, arr_res):
+
+
+        Arr_ten_num = np.linspace(0, 1, 10)
+
         self.F.clear()
         self.canvas.draw()
         a = self.F.add_subplot()
         a.set_title('Функция энтропии')
-        a.plot(Arr_ten_num, Result_array)
+        a.plot(Arr_ten_num, arr_res)
         self.canvas.draw()
         self.toolbar.update()
-        return
 
-    def Draw_Bernylli_table(self,n):
-        self.sheet = Sheet(self.window, data=[[f"{round(c, 3)}" for c in self.All_tables[n]] for r in range(1)],
-                           height=120, width=900, default_header="numbers")
-        self.sheet.enable_bindings()
-        self.sheet.change_theme(theme="light blue")
-        self.sheet.grid(row=0, column=0)
+        self.list_box_table = Listbox(self.fr_List_of_tables)
+        for indx in range(1,len(self.All_tables)+1):
+            self.list_box_table.insert(0, indx)
+        self.list_box_table.grid(row=0, column=0, padx=6, pady=6)
+        self.button_display_table = Button(self.fr_List_of_tables, text="Вывести таблицу",
+                                           command=self.Draw_Bernylli_table, anchor=W)
+        self.button_display_table.configure(width=15, activebackground="#33B5E5")
+        self.button_display_table.grid(row=0, column=1, padx=6, pady=6)
+
+
+    def Hide_Table(self):
+        self.sheet.destroy()
+        self.label_table.destroy()
+        self.button_hide_table.destroy()
+
+    def Draw_Bernylli_table(self):
+        if self.list_box_table.curselection():
+            self.label_table = Label(self.fr_Sheet, text="Вероятностная схема:")
+            self.label_table.grid(row=0, column=0)
+            n = self.select_table_for_draw()
+            self.sheet = Sheet(self.fr_Sheet, data=[[f"{round(c, 5)}" for c in self.All_tables[n]] for r in range(1)],
+                               height=120,
+                               width=500, default_header="numbers")
+            self.sheet.enable_bindings()
+            self.sheet.change_theme(theme="light blue")
+            self.sheet.grid(row=1, column=0)
+
+            self.button_hide_table = Button(self.fr_List_of_tables, text="Убрать таблицу",
+                                               command=self.Hide_Table, anchor=W)
+            self.button_hide_table.configure(width=15, activebackground="#33B5E5")
+            self.button_hide_table.grid(row=1, column=1)
+        return
 
 def Bernylli_Test(n, p):
     M = 0
