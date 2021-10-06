@@ -3,6 +3,8 @@ from tkinter import font
 from tkinter import messagebox
 from tkinter import filedialog
 from Task1 import Task_1
+from Task2 import Task_2
+from Task3 import Task_3
 import os
 
 def create_Visuals():
@@ -11,30 +13,37 @@ def create_Visuals():
     opt_menu.delete("Задача №2")
     opt_menu.delete("Задача №3")
     opt_menu.delete("Выход")
+    global label2
     label2.configure(text="")
-    root.geometry("1466x950")
+    root.geometry("1173x720")
 
     global temp
-    temp = Task_1(root)
+    temp = Task_2(root)
     opt_menu.add_command(label="Выход", command=delete_Visuals)
 
 
 def create_Visuals_graph():
     #opt_menu.delete("Просмотреть теорию")
-    opt_menu.delete("Просмотреть визуализацию-игру")
-    opt_menu.delete("Просмотреть визуализацию в виде графика")
+    opt_menu.delete("Задача №1")
+    opt_menu.delete("Задача №2")
+    opt_menu.delete("Задача №3")
     opt_menu.delete("Выход")
+    global label2
     label2.configure(text="")
-    root.geometry("720x800")
+    root.geometry("1173x720")
 
     global temp
-
+    temp = Task_3(root)
     opt_menu.add_command(label="Выход", command=delete_Visuals)
 
 def Task1():
-
+    opt_menu.delete("Задача №1")
+    opt_menu.delete("Задача №2")
+    opt_menu.delete("Задача №3")
+    opt_menu.delete("Выход")
+    global label2
     label2.configure(text="")
-    root.geometry("1466x950")
+    root.geometry("1173x720")
     global temp
     temp = Task_1(root)
     opt_menu.add_command(label="Выход", command=delete_Visuals)
@@ -48,10 +57,10 @@ def delete_Visuals():
     opt_menu.add_command(label="Задача №3", command=create_Visuals_graph)
     opt_menu.add_separator()
     opt_menu.add_command(label="Выход", command=root.destroy)
-    # root.geometry("360x250")
     root.geometry("720x500")
-    poetry = "«Моделирование процесса движения тела,\nброшенного под углом к горизонту»\n\nВыполнил студент гр. ДИПРБ 21\n              Ягафаров Тимур"
-    label2 = Label(font=("Times", 14), text=poetry, justify=LEFT)
+    poetry = "Лабораторная работа №1.\n  «Энтропия. Свойства энтропии»\n\nВыполнил студент гр. ДИПРБ 31\nЯгафаров Тимур"
+    global label2
+    label2.configure(text=poetry)
     label2.place(relx=.3, rely=.4)
 
 

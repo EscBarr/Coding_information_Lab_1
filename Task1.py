@@ -1,10 +1,9 @@
 import math
 from tkinter import *
 import numpy as np
-import scipy.integrate as integrate
 import matplotlib
 from tksheet import Sheet
-
+import matplotlib.pyplot as plt
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
@@ -30,31 +29,20 @@ class Task_1:
     def __init__(self, window):
         self.Num_Trials = 5  # Кол-во испытаний
         self.Probability = float(0.1)  # Текущая вероятность
-        # self.delta = 0.1  # Шаг изменения вероятности
         self.All_tables = []  # Результат всех вычислений
         self.window = window
-        #self.window.grid_columnconfigure(0, weight=0)
-        #self.window.grid_rowconfigure(0, weight=0)
-        #self.window.grid_columnconfigure(1, weight=1)
-        #self.window.grid_rowconfigure(1, weight=1)
 
         self.fr_left = Frame(window)
-        #self.fr_left.configure(background='red')
         self.fr_left.grid(row=1, column=0,padx=6, pady=6)
 
         self.fr_Sheet = Frame(window)
         self.fr_Sheet.grid(row=0, column=1,padx=6, pady=6)
-        #self.fr_Sheet.grid_columnconfigure(0, weight=1)
-        #self.fr_Sheet.grid_rowconfigure(0, weight=1)
-        #self.fr_Sheet.grid(row=0, column=0)
-        #self.fr_Sheet.configure(background='black')
-        #self.fr_Sheet.grid_propagate(False)
+
 
         self.fr_List_of_tables = Frame(window)
         self.fr_List_of_tables.grid(row=1, column=1,padx=6, pady=6)
 
         self.fr_canvas = Frame(window)
-        #self.fr_canvas.configure(background='red')
         self.fr_canvas.grid(row=0, column=0,padx=6, pady=6)
 
         self.F = Figure()
@@ -63,7 +51,6 @@ class Task_1:
 
         self.toolbar = CustomToolbar(self.canvas, self.fr_canvas)
         self.toolbar.update()
-        #self.toolbar.pack(side=BOTTOM)
         self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
         self.Init_left_frame()
 
@@ -91,10 +78,6 @@ class Task_1:
         self.entry_P.grid(row=2, column=1, padx=6, pady=6)
         self.entry_P.insert(0, str(self.Probability))
         self.entry_P.bind("<KeyRelease>", self.change_field_P)
-
-
-
-
 
         #self.fr_left.pack(side=BOTTOM)
 
@@ -144,7 +127,7 @@ class Task_1:
             for It_inside in It:
                 Result_entropy += (It_inside * math.log2(It_inside))
             Result_array.append(-1 * Result_entropy)
-
+        Result_array.insert(0,0)
         self.draw_bernylli_table_task1(Result_array)
         return
 
@@ -157,15 +140,46 @@ class Task_1:
 
 
     def draw_bernylli_table_task1(self, arr_res):
-
-
-        Arr_ten_num = np.linspace(0, 1, 10)
-
+        Arr_ten_num = np.arange(0., 1.1, 0.1)
+        Arr_ten_num_x = np.arange(0, 2, 0.2)
         self.F.clear()
         self.canvas.draw()
         a = self.F.add_subplot()
         a.set_title('Функция энтропии')
         a.plot(Arr_ten_num, arr_res)
+        plt.setp(a, xticks=Arr_ten_num_x)
+
+        ymax = max(arr_res)
+        xpos = arr_res.index(ymax)
+        xmax = Arr_ten_num[xpos]
+        arr_res.pop(0)
+        ymin = min(arr_res)
+        xpos_min = arr_res.index(ymin)
+        xmin = Arr_ten_num[xpos_min+1]
+
+        text = "Максимум: x={:.3f}, y={:.3f}".format(xmax, ymax)
+
+        text_min = "Минимум: x={:.3f}, y={:.3f}".format(xmin, ymin)
+
+        bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+
+        arrowprops = dict(arrowstyle="->", connectionstyle="angle,angleA=0,angleB=240")
+
+        kw = dict(xycoords='data', textcoords="axes fraction",
+                  arrowprops=arrowprops, bbox=bbox_props, ha="right", va="top")
+
+        kw1 = dict(xycoords='data', textcoords="axes fraction",
+                  arrowprops=arrowprops, bbox=bbox_props, ha="right", va="top")
+
+        a.annotate(text, xy=(xmax, ymax), xytext=(0.54, 0.96), **kw)
+
+        a.annotate(text_min, xy=(xmin, ymin), xytext=(0.94, 0.50), **kw1)
+
+        a.set_xlabel('P')
+        a.set_ylabel('N')
+
+
+
         self.canvas.draw()
         self.toolbar.update()
 
@@ -201,6 +215,13 @@ class Task_1:
             self.button_hide_table.configure(width=15, activebackground="#33B5E5")
             self.button_hide_table.grid(row=0, column=1, padx=6, pady=6)
         return
+
+    def __del__(self):
+        self.fr_left.destroy()
+        self.fr_Sheet.destroy()
+        self.fr_canvas.destroy()
+        self.fr_List_of_tables.destroy()
+
 
 def Bernylli_Test(n, p):
     M = 0
