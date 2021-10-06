@@ -29,7 +29,7 @@ class Task_1:
 
     def __init__(self, window):
         self.Num_Trials = 5  # Кол-во испытаний
-        self.Probability = 0.1  # Текущая вероятность
+        self.Probability = float(0.1)  # Текущая вероятность
         # self.delta = 0.1  # Шаг изменения вероятности
         self.All_tables = []  # Результат всех вычислений
         self.window = window
@@ -40,10 +40,10 @@ class Task_1:
 
         self.fr_left = Frame(window)
         #self.fr_left.configure(background='red')
-        self.fr_left.grid(row=1, column=1,padx=6, pady=6)
+        self.fr_left.grid(row=1, column=0,padx=6, pady=6)
 
         self.fr_Sheet = Frame(window)
-        self.fr_Sheet.grid(row=0, column=0,padx=6, pady=6)
+        self.fr_Sheet.grid(row=0, column=1,padx=6, pady=6)
         #self.fr_Sheet.grid_columnconfigure(0, weight=1)
         #self.fr_Sheet.grid_rowconfigure(0, weight=1)
         #self.fr_Sheet.grid(row=0, column=0)
@@ -51,11 +51,11 @@ class Task_1:
         #self.fr_Sheet.grid_propagate(False)
 
         self.fr_List_of_tables = Frame(window)
-        self.fr_List_of_tables.grid(row=1, column=0,padx=6, pady=6)
+        self.fr_List_of_tables.grid(row=1, column=1,padx=6, pady=6)
 
         self.fr_canvas = Frame(window)
         #self.fr_canvas.configure(background='red')
-        self.fr_canvas.grid(row=0, column=1,padx=6, pady=6)
+        self.fr_canvas.grid(row=0, column=0,padx=6, pady=6)
 
         self.F = Figure()
         self.canvas = FigureCanvasTkAgg(self.F, self.fr_canvas)
@@ -63,8 +63,8 @@ class Task_1:
 
         self.toolbar = CustomToolbar(self.canvas, self.fr_canvas)
         self.toolbar.update()
-        self.toolbar.pack(side=BOTTOM, fill=X)
-        self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True, padx=6, pady=6 )
+        #self.toolbar.pack(side=BOTTOM)
+        self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
         self.Init_left_frame()
 
     def Init_left_frame(self):
@@ -169,14 +169,14 @@ class Task_1:
         self.canvas.draw()
         self.toolbar.update()
 
-        self.list_box_table = Listbox(self.fr_List_of_tables)
+        self.list_box_table = Listbox(self.fr_Sheet)
         for indx in range(1,len(self.All_tables)+1):
             self.list_box_table.insert(0, indx)
         self.list_box_table.grid(row=0, column=0, padx=6, pady=6)
-        self.button_display_table = Button(self.fr_List_of_tables, text="Вывести таблицу",
-                                           command=self.Draw_Bernylli_table, anchor=W)
+        self.button_display_table = Button(self.fr_Sheet, text="Вывести таблицу",
+                                           command=self.Draw_Bernylli_table)
         self.button_display_table.configure(width=15, activebackground="#33B5E5")
-        self.button_display_table.grid(row=0, column=1, padx=6, pady=6)
+        self.button_display_table.grid(row=1, column=0, padx=6, pady=6)
 
 
     def Hide_Table(self):
@@ -186,20 +186,20 @@ class Task_1:
 
     def Draw_Bernylli_table(self):
         if self.list_box_table.curselection():
-            self.label_table = Label(self.fr_Sheet, text="Вероятностная схема:")
+            self.label_table = Label(self.fr_List_of_tables, text="Вероятностная схема:")
             self.label_table.grid(row=0, column=0, padx=6, pady=6)
             n = self.select_table_for_draw()
-            self.sheet = Sheet(self.fr_Sheet, data=[[f"{round(c, 5)}" for c in self.All_tables[n]] for r in range(1)],
+            self.sheet = Sheet(self.fr_List_of_tables, data=[[f"{round(c, 5)}" for c in self.All_tables[n]] for r in range(1)],
                                height=120,
                                width=500, default_header="numbers")
             self.sheet.enable_bindings()
             self.sheet.change_theme(theme="light blue")
             self.sheet.grid(row=1, column=0, padx=6, pady=6)
 
-            self.button_hide_table = Button(self.fr_List_of_tables, text="Убрать таблицу",
-                                               command=self.Hide_Table, anchor=W)
+            self.button_hide_table = Button(self.fr_Sheet, text="Убрать таблицу",
+                                               command=self.Hide_Table)
             self.button_hide_table.configure(width=15, activebackground="#33B5E5")
-            self.button_hide_table.grid(row=1, column=1, padx=6, pady=6)
+            self.button_hide_table.grid(row=0, column=1, padx=6, pady=6)
         return
 
 def Bernylli_Test(n, p):

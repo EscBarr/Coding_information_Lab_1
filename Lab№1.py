@@ -7,11 +7,12 @@ import os
 
 def create_Visuals():
     #opt_menu.delete("Просмотреть теорию")
-    opt_menu.delete("Просмотреть визуализацию-игру")
-    opt_menu.delete("Просмотреть визуализацию в виде графика")
+    opt_menu.delete("Задача №1")
+    opt_menu.delete("Задача №2")
+    opt_menu.delete("Задача №3")
     opt_menu.delete("Выход")
     label2.configure(text="")
-    root.geometry("1466x750")
+    root.geometry("1466x950")
 
     global temp
     temp = Task_1(root)
@@ -33,7 +34,7 @@ def create_Visuals_graph():
 def Task1():
 
     label2.configure(text="")
-    root.geometry("1466x750")
+    root.geometry("1466x950")
     global temp
     temp = Task_1(root)
     opt_menu.add_command(label="Выход", command=delete_Visuals)
