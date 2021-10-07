@@ -1,8 +1,6 @@
 import Task1 as Base
 import math
 from tkinter import *
-import numpy as np
-import scipy.integrate as integrate
 import matplotlib
 from tksheet import Sheet
 
@@ -75,10 +73,10 @@ class Task_2(Base.Task_1):
         p_temp = self.Probability
         self.All_tables.clear()
         while p_temp <= 1:
-            self.All_tables.append(Calc_N(self.Num_Trials, p_temp))
+            self.All_tables.append(Calc_N(self.Num_Trials, p_temp)) #добавляем в итоговый массив с результатами N для каждой вероятности
             p_temp += 0.1
         Result_array = []
-        for It in self.All_tables:
+        for It in self.All_tables:#Считаем энтропию
             Result_entropy = 0
             for It_inside in It:
                 Result_entropy += (It_inside * math.log2(It_inside))
@@ -87,13 +85,12 @@ class Task_2(Base.Task_1):
         self.draw_bernylli_table_task1(Result_array)
         return
 
-def Calc_N(n, p):
+def Calc_N(n, p):#ищем значение N при котором событие произойдет с вероятностью близкой к 1
     M = 0
     Result = []
     q = 1 - p
     Res_sum = 0
     Res = 0
-    #not math.isclose(Res_sum, 1)
     while Res_sum < 0.99:
         Res = p * math.pow(q, M)
         Res_sum += Res

@@ -7,7 +7,7 @@ from Task2 import Task_2
 from Task3 import Task_3
 import os
 
-def create_Visuals():
+def Task2():
     #opt_menu.delete("Просмотреть теорию")
     opt_menu.delete("Задача №1")
     opt_menu.delete("Задача №2")
@@ -22,7 +22,7 @@ def create_Visuals():
     opt_menu.add_command(label="Выход", command=delete_Visuals)
 
 
-def create_Visuals_graph():
+def Task3():
     #opt_menu.delete("Просмотреть теорию")
     opt_menu.delete("Задача №1")
     opt_menu.delete("Задача №2")
@@ -53,8 +53,8 @@ def delete_Visuals():
     opt_menu.delete("Выход")
     opt_menu.delete(0)
     opt_menu.add_command(label="Задача №1", command=Task1)
-    opt_menu.add_command(label="Задача №2", command=create_Visuals)
-    opt_menu.add_command(label="Задача №3", command=create_Visuals_graph)
+    opt_menu.add_command(label="Задача №2", command=Task2)
+    opt_menu.add_command(label="Задача №3", command=Task3)
     opt_menu.add_separator()
     opt_menu.add_command(label="Выход", command=root.destroy)
     root.geometry("720x500")
@@ -80,8 +80,8 @@ defaultFont.configure(family="Times", size=12)
 global opt_menu
 opt_menu = Menu(font=("Times", 14), tearoff=0)
 opt_menu.add_command(label="Задача №1", command = Task1)
-opt_menu.add_command(label="Задача №2", command=create_Visuals)
-opt_menu.add_command(label="Задача №3", command=create_Visuals_graph)
+opt_menu.add_command(label="Задача №2", command=Task2)
+opt_menu.add_command(label="Задача №3", command=Task3)
 opt_menu.add_separator()
 opt_menu.add_command(label="Выход", command=root.destroy)
 main_menu = Menu()

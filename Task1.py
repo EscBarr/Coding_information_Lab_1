@@ -119,10 +119,10 @@ class Task_1:
         p_temp = self.Probability
         self.All_tables.clear()
         while p_temp <= 1:
-            self.All_tables.append(Bernylli_Test(self.Num_Trials, p_temp))
+            self.All_tables.append(Bernylli_Test(self.Num_Trials, p_temp))#добавляем в итоговый массив с результатами испытаний для каждой вероятности
             p_temp += 0.1
         Result_array = []
-        for It in self.All_tables:
+        for It in self.All_tables: #Считаем энтропию
             Result_entropy = 0
             for It_inside in It:
                 Result_entropy += (It_inside * math.log2(It_inside))
@@ -223,7 +223,7 @@ class Task_1:
         self.fr_List_of_tables.destroy()
 
 
-def Bernylli_Test(n, p):
+def Bernylli_Test(n, p): #Формула Бернулли
     M = 0
     Result = []
     q = 1 - p

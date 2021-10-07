@@ -2,9 +2,9 @@ import Task1 as Base
 import math
 from tkinter import *
 import numpy as np
-import scipy.integrate as integrate
 import matplotlib
 from tksheet import Sheet
+import matplotlib.pyplot as plt
 
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -105,15 +105,72 @@ class Task_3(Base.Task_1):
         if len(s.get()) >= 1:
             self.Num_M = int(s.get())
 
+    def draw_bernylli_table_task1(self, arr_res): #простая перегрузка метода для отрисовки графика и подготовки таблицы
+        Arr_ten_num = np.arange(0, len(arr_res), 1)
+        Arr_ten_num_x = np.arange(0, self.Num_M, 1)
+        self.F.clear()
+        self.canvas.draw()
+        a = self.F.add_subplot()
+        a.set_title('Функция энтропии')
+        a.plot(Arr_ten_num, arr_res)
+        plt.setp(a, xticks=Arr_ten_num_x)
 
-def Calc_N(n, m, k):
+        ymax = max(arr_res)
+        xpos = arr_res.index(ymax)
+        xmax = Arr_ten_num[xpos]
+        arr_res.pop(0)
+        ymin = min(arr_res)
+        xpos_min = arr_res.index(ymin)
+        xmin = Arr_ten_num[xpos_min+1]
+
+        text = "Максимум: x={:.3f}, y={:.3f}".format(xmax, ymax)
+
+        text_min = "Минимум: x={:.3f}, y={:.3f}".format(xmin, ymin)
+
+        bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+
+        arrowprops = dict(arrowstyle="->", connectionstyle="angle,angleA=0,angleB=240")
+
+        kw = dict(xycoords='data', textcoords="axes fraction",
+                  arrowprops=arrowprops, bbox=bbox_props, ha="right", va="top")
+
+        kw1 = dict(xycoords='data', textcoords="axes fraction",
+                  arrowprops=arrowprops, bbox=bbox_props, ha="right", va="top")
+
+        a.annotate(text, xy=(xmax, ymax), xytext=(0.54, 0.96), **kw)
+
+        a.annotate(text_min, xy=(xmin, ymin), xytext=(0.94, 0.50), **kw1)
+
+        a.set_xlabel('P')
+        a.set_ylabel('N')
+
+
+
+        self.canvas.draw()
+        self.toolbar.update()
+
+        self.list_box_table = Listbox(self.fr_Sheet)
+        for indx in range(1,len(self.All_tables)+1):
+            self.list_box_table.insert(0, indx)
+        self.list_box_table.grid(row=0, column=0, padx=6, pady=6)
+        self.button_display_table = Button(self.fr_Sheet, text="Вывести таблицу",
+                                           command=self.Draw_Bernylli_table)
+        self.button_display_table.configure(width=15, activebackground="#33B5E5")
+        self.button_display_table.grid(row=1, column=0, padx=6, pady=6)
+
+def Calc_N(n, m, k):# подсчет по закону гипергеометрического распределения
     i = 0
     Result = []
     Res = 0
     while i <= m and i <= k:
-        if ((n - k) < (m - i)):
-            break
-        Res = math.comb(k, i) * math.comb(n - k, m - i) / math.comb(n, m)
-        Result.append(Res)
+        if ((n - k) < (m - i)):#костыль иначе берутся неподходящие значения
+            pass
+        else:
+            Res = math.comb(k, i) * math.comb(n - k, m - i) / math.comb(n, m)
+            Result.append(Res)
         i += 1
     return Result
+
+
+
+
